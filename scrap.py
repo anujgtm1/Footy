@@ -1,9 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 
-
 # For original match attribute
-def parseTreeLink(subtree):
+def parseTree(subtree):
     subtree = [t for t in subtree if t != ' ']
     i = 0
     while i < len(subtree):
@@ -44,7 +43,7 @@ def get_score(url):
     extractTag(content, 'div', 'row mt4 bb bt')
     extractTag(content, 'div', 'cal clear')
 
-#    links = content.findAll('a')
+#    links = content.finAll('a')
 #    score = parseTree(content)
 #    score[0] = score[0][1]
 #    score = score[:-1]
@@ -63,28 +62,28 @@ def parseTable(table):
         print "|".join(record)
 
 
-# This is to be used for each match stats
-def parseTree(subtree):
-    subtree = [t for t in subtree if t != ' ']
-    i = 0
-    while i < len(subtree):
-        name = getattr(subtree[i], "name", None)
-        if name is not None:
-            if name == 'span':
-                if subtree[i].has_attr('class'):
-                    if subtree[i]['class'][0] == 'inc':
-                        subtree[i].append(subtree[i]['class'][1])
-            subtree[i] = parseTree(subtree[i])
-        i += 1
-    subtree = [t
-               for t in subtree
-               if t != ' ' and t != '' and t is not None and t != []]
-    if len(subtree) == 1:
-        subtree = subtree[0]
-    return subtree
-
+#This is to be used for each match stats
+#def parseTree(subtree):
+#    subtree = [t for t in subtree if t != ' ']
+#    i = 0
+#    while i < len(subtree):
+#        name = getattr(subtree[i], "name", None)
+#        if name is not None:
+#            if name == 'span':
+#                if subtree[i].has_attr('class'):
+#                    if subtree[i]['class'][0] == 'inc':
+#                        subtree[i].append(subtree[i]['class'][1])
+#            subtree[i] = parseTree(subtree[i])
+#        i += 1
+#    subtree = [t
+#               for t in subtree
+#               if t != ' ' and t != '' and t is not None and t != []]
+#    if len(subtree) == 1:
+#        subtree = subtree[0]
+#    return subtree
+#
 score = get_score('http://www.livescore.com/soccer/england/premier-league/')
-pscore = parseTreeLink(score)
+score = parseTree(score)
 
 res = requests.get('http://www.livescore.com/soccer/england/premier-league/liverpool-vs-stoke-city/1-1989032/')
 soup = BeautifulSoup(res.text, 'html.parser')
